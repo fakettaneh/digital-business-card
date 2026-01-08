@@ -2,65 +2,79 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>QR, vCard & WhatsApp</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Digital Business Card</title>
 <style>
-body{font-family:Arial;background:#f2f2f2;padding:20px}
-.container{max-width:420px;margin:auto;background:#fff;padding:20px;border-radius:12px;}
-input,button{width:100%;padding:12px;margin-top:10px;font-size:16px;}
-button{background:#0a5fb4;color:#fff;border:none;border-radius:6px;cursor:pointer;}
-img{display:block;margin:20px auto;max-width:100%;}
+body { font-family: Arial; background:#f4f4f4; padding:30px; }
+.container { max-width:400px; margin:auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1);}
+h2 { text-align:center; }
+input { width:100%; padding:10px; margin:10px 0; border-radius:6px; border:1px solid #ccc; }
+button { width:100%; padding:12px; background:#0a5fb4; color:#fff; border:none; border-radius:6px; font-size:16px; cursor:pointer; margin-top:5px;}
+img{display:block;margin:20px auto; max-width:100%;}
 </style>
 </head>
 <body>
 
 <div class="container">
-<h3>Digital Business Card</h3>
-
-<input id="name" placeholder="Full Name">
-<input id="phone" placeholder="+9627xxxxxxxx">
-<input id="email" placeholder="email@company.com">
-
+<h2>QR, vCard & WhatsApp</h2>
+<input type="text" id="name" placeholder="Full Name">
+<input type="text" id="phone" placeholder="Phone (ex: +962780888093)">
+<input type="email" id="email" placeholder="Email">
 <button onclick="generateQR()">Generate QR</button>
-<img id="qr" style="display:none;">
-<button onclick="downloadVCard()">Download vCard</button>
+<img id="qrcode" style="display:none;">
+<button id="downloadBtn" style="display:none;" onclick="downloadVCard()">Download vCard</button>
+<button id="whatsappBtn" style="display:none;" onclick="sendWhatsApp()">Send via WhatsApp</button>
 </div>
 
 <script>
 let currentVCard = "";
 
-// توليد QR باستخدام API
+// توليد QR باستخدام API (شغال على أي موبايل)
 function generateQR(){
-  const n = document.getElementById("name").value.trim();
-  const p = document.getElementById("phone").value.trim();
-  const e = document.getElementById("email").value.trim();
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const email = document.getElementById("email").value.trim();
 
-  if(!n||!p||!e){ alert("Fill all fields"); return; }
+    if(!name || !phone || !email){
+        alert("Please fill all fields!");
+        return;
+    }
 
-  currentVCard =
-`BEGIN:VCARD
+    currentVCard = `BEGIN:VCARD
 VERSION:3.0
-FN:${n}
-TEL:${p}
-EMAIL:${e}
+FN:${name}
+TEL;TYPE=CELL:${phone}
+EMAIL:${email}
 ORG:F. A. Kettaneh & Co. LTD
 END:VCARD`;
 
-  const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(currentVCard);
+    const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + encodeURIComponent(currentVCard);
 
-  const img = document.getElementById("qr");
-  img.src = qrUrl;
-  img.style.display = "block";
+    const img = document.getElementById("qrcode");
+    img.src = qrUrl;
+    img.style.display = "block";
+
+    document.getElementById("downloadBtn").style.display = "block";
+    document.getElementById("whatsappBtn").style.display = "block";
 }
 
 // تحميل vCard
 function downloadVCard(){
-  if(!currentVCard){ alert("Generate QR first"); return; }
-  const blob = new Blob([currentVCard],{type:"text/vcard"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "contact.vcf";
-  a.click();
+    if(!currentVCard){ alert("Generate QR first"); return; }
+    const blob = new Blob([currentVCard], { type: "text/vcard" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = document.getElementById("name").value.trim().replace(/\s+/g,"_") + ".vcf";
+    a.click();
+}
+
+// ارسال WhatsApp
+function sendWhatsApp(){
+    let clientPhone = prompt("Enter recipient's phone with country code (ex: 9627xxxxxxx):");
+    if(!clientPhone) return;
+    const text = `Here is my contact:\nName: ${document.getElementById("name").value}\nPhone: ${document.getElementById("phone").value}\nEmail: ${document.getElementById("email").value}`;
+    const url = "https://wa.me/" + clientPhone + "?text=" + encodeURIComponent(text);
+    window.open(url, "_blank");
 }
 </script>
 
