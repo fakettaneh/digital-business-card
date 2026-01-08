@@ -2,45 +2,136 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>QR, vCard & WhatsApp</title>
+<title>Kettaneh – Digital Business Card</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
-body { font-family: Arial; background:#f4f4f4; padding:30px; }
-.container { max-width:400px; margin:auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1);}
-h2 { text-align:center; }
-input { width:100%; padding:10px; margin:10px 0; border-radius:6px; border:1px solid #ccc; }
-button { width:100%; padding:12px; background:#0a5fb4; color:#fff; border:none; border-radius:6px; font-size:16px; cursor:pointer; margin-top:5px;}
-img{display:block;margin:20px auto; max-width:100%;}
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #0a5fb4, #083c75);
+    padding: 30px;
+}
+
+.container {
+    max-width: 420px;
+    margin: auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+.logo {
+    max-width: 180px;
+    margin-bottom: 15px;
+}
+
+h2 {
+    margin: 10px 0;
+    color: #083c75;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    background: #0a5fb4;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+button:hover {
+    background: #083c75;
+}
+
+#qrcode {
+    display: none;
+    margin: 20px auto;
+    max-width: 100%;
+}
+
+.socials {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 20px;
+}
+
+.socials a {
+    text-decoration: none;
+    font-size: 22px;
+    color: #0a5fb4;
+}
+
+.footer {
+    margin-top: 15px;
+    font-size: 13px;
+    color: #777;
+}
 </style>
 </head>
+
 <body>
 
 <div class="container">
-<h2>QR, vCard & WhatsApp</h2>
-<input type="text" id="name" placeholder="Full Name">
-<input type="text" id="phone" placeholder="Phone (ex: +962780888093)">
-<input type="email" id="email" placeholder="Email">
-<button onclick="generateQR()">Generate QR</button>
-<img id="qrcode" style="display:none;">
-<button id="downloadBtn" style="display:none;" onclick="downloadVCard()">Download vCard</button>
-<button id="whatsappBtn" style="display:none;" onclick="sendWhatsApp()">Send via WhatsApp</button>
+
+    <!-- Logo -->
+    <img src="logo.png" alt="Kettaneh Logo" class="logo">
+
+    <h2>Digital Business Card</h2>
+
+    <!-- Inputs -->
+    <input type="text" id="name" placeholder="Full Name">
+    <input type="text" id="phone" placeholder="Phone (ex: +962780888093)">
+    <input type="email" id="email" placeholder="Email">
+
+    <!-- Actions -->
+    <button onclick="generateQR()">Generate QR Code</button>
+
+    <img id="qrcode">
+
+    <button id="saveQRBtn" style="display:none;" onclick="saveQR()">Save QR Code</button>
+
+    <!-- Social Media -->
+    <div class="socials">
+        <a href="https://www.facebook.com/kettaneh" target="_blank">📘</a>
+        <a href="https://www.instagram.com/kettanehgroup" target="_blank">📸</a>
+        <a href="https://www.kettaneh.com.jo/en" target="_blank">🌐</a>
+    </div>
+
+    <div class="footer">
+        © F. A. Kettaneh & Co. LTD
+    </div>
+
 </div>
 
 <script>
-let currentVCard = "";
+let qrImageUrl = "";
 
-// توليد QR باستخدام API (شغال على أي موبايل)
 function generateQR(){
     const name = document.getElementById("name").value.trim();
     const phone = document.getElementById("phone").value.trim();
     const email = document.getElementById("email").value.trim();
 
     if(!name || !phone || !email){
-        alert("Please fill all fields!");
+        alert("Please fill all fields");
         return;
     }
 
-    currentVCard = `BEGIN:VCARD
+    const vCard = `BEGIN:VCARD
 VERSION:3.0
 FN:${name}
 TEL;TYPE=CELL:${phone}
@@ -48,33 +139,25 @@ EMAIL:${email}
 ORG:F. A. Kettaneh & Co. LTD
 END:VCARD`;
 
-    const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + encodeURIComponent(currentVCard);
+    qrImageUrl =
+        "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data="
+        + encodeURIComponent(vCard);
 
     const img = document.getElementById("qrcode");
-    img.src = qrUrl;
+    img.src = qrImageUrl;
     img.style.display = "block";
 
-    document.getElementById("downloadBtn").style.display = "block";
-    document.getElementById("whatsappBtn").style.display = "block";
+    document.getElementById("saveQRBtn").style.display = "block";
 }
 
-// تحميل vCard
-function downloadVCard(){
-    if(!currentVCard){ alert("Generate QR first"); return; }
-    const blob = new Blob([currentVCard], { type: "text/vcard" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = document.getElementById("name").value.trim().replace(/\s+/g,"_") + ".vcf";
-    a.click();
-}
+function saveQR(){
+    if(!qrImageUrl) return;
 
-// ارسال WhatsApp
-function sendWhatsApp(){
-    let clientPhone = prompt("Enter recipient's phone with country code (ex: 9627xxxxxxx):");
-    if(!clientPhone) return;
-    const text = `Here is my contact:\nName: ${document.getElementById("name").value}\nPhone: ${document.getElementById("phone").value}\nEmail: ${document.getElementById("email").value}`;
-    const url = "https://wa.me/" + clientPhone + "?text=" + encodeURIComponent(text);
-    window.open(url, "_blank");
+    const link = document.createElement("a");
+    link.href = qrImageUrl;
+    link.download =
+        document.getElementById("name").value.trim().replace(/\s+/g,"_") + "_QR.png";
+    link.click();
 }
 </script>
 
