@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <title>QR, vCard & WhatsApp</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 body { font-family: Arial; background:#f4f4f4; padding:30px; }
 .container { max-width:400px; margin:auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1);}
 h2 { text-align:center; }
 input { width:100%; padding:10px; margin:10px 0; border-radius:6px; border:1px solid #ccc; }
 button { width:100%; padding:12px; background:#0a5fb4; color:#fff; border:none; border-radius:6px; font-size:16px; cursor:pointer; margin-top:5px;}
-img{display:block;margin:20px auto; max-width:100%;}
+#qrcode { text-align:center; margin-top:20px; }
 </style>
 </head>
 <body>
@@ -21,19 +21,20 @@ img{display:block;margin:20px auto; max-width:100%;}
 <input type="text" id="phone" placeholder="Phone (ex: +962780888093)">
 <input type="email" id="email" placeholder="Email">
 <button onclick="generateQR()">Generate QR</button>
-<img id="qrcode" style="display:none;">
 <button id="downloadBtn" style="display:none;" onclick="downloadVCard()">Download vCard</button>
+<button id="saveQRBtn" style="display:none;" onclick="saveQR()">Save QR Image</button>
 <button id="whatsappBtn" style="display:none;" onclick="sendWhatsApp()">Send via WhatsApp</button>
+<div id="qrcode"></div>
 </div>
 
 <script>
 let currentVCard = "";
+let qrElement = null;
 
-// توليد QR باستخدام API (شغال على أي موبايل)
-function generateQR(){
-    const name = document.getElementById("name").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const email = document.getElementById("email").value.trim();
+function generateQR() {
+    let name = document.getElementById("name").value.trim();
+    let phone = document.getElementById("phone").value.trim();
+    let email = document.getElementById("email").value.trim();
 
     if(!name || !phone || !email){
         alert("Please fill all fields!");
@@ -48,32 +49,52 @@ EMAIL:${email}
 ORG:F. A. Kettaneh & Co. LTD
 END:VCARD`;
 
-    const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + encodeURIComponent(currentVCard);
-
-    const img = document.getElementById("qrcode");
-    img.src = qrUrl;
-    img.style.display = "block";
+    document.getElementById("qrcode").innerHTML = "";
+    qrElement = new QRCode(document.getElementById("qrcode"), {
+        text: currentVCard,
+        width: 250,
+        height: 250,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
 
     document.getElementById("downloadBtn").style.display = "block";
+    document.getElementById("saveQRBtn").style.display = "block";
     document.getElementById("whatsappBtn").style.display = "block";
 }
 
-// تحميل vCard
-function downloadVCard(){
-    if(!currentVCard){ alert("Generate QR first"); return; }
-    const blob = new Blob([currentVCard], { type: "text/vcard" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = document.getElementById("name").value.trim().replace(/\s+/g,"_") + ".vcf";
-    a.click();
+function downloadVCard() {
+    if(!currentVCard) return;
+    let blob = new Blob([currentVCard], { type: "text/vcard" });
+    let link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = document.getElementById("name").value.trim().replace(/\s+/g,"_") + ".vcf";
+    link.click();
 }
 
-// ارسال WhatsApp
-function sendWhatsApp(){
+function saveQR() {
+    if(!qrElement) return;
+    let img = document.querySelector("#qrcode img, #qrcode canvas");
+    if(!img) { alert("QR not ready"); return; }
+
+    let link = document.createElement("a");
+    if(img.tagName === "IMG") {
+        link.href = img.src;
+    } else { // canvas
+        link.href = img.toDataURL("image/png");
+    }
+    link.download = document.getElementById("name").value.trim().replace(/\s+/g,"_") + "_QR.png";
+    link.click();
+}
+
+function sendWhatsApp() {
     let clientPhone = prompt("Enter recipient's phone with country code (ex: 9627xxxxxxx):");
     if(!clientPhone) return;
-    const text = `Here is my contact:\nName: ${document.getElementById("name").value}\nPhone: ${document.getElementById("phone").value}\nEmail: ${document.getElementById("email").value}`;
-    const url = "https://wa.me/" + clientPhone + "?text=" + encodeURIComponent(text);
+
+    let text = `Here is my contact:\nName: ${document.getElementById("name").value}\nPhone: ${document.getElementById("phone").value}\nEmail: ${document.getElementById("email").value}`;
+    
+    let url = "https://wa.me/" + clientPhone + "?text=" + encodeURIComponent(text);
     window.open(url, "_blank");
 }
 </script>
