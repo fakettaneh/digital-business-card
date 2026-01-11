@@ -86,7 +86,7 @@ button:hover {
 
 /* ===== Footer ===== */
 .page-footer {
-    position: fixed;
+    position: fixed; /* ثابت في أسفل الصفحة */
     bottom: 14px;
     width: 100%;
     text-align: center;
@@ -96,20 +96,8 @@ button:hover {
     opacity: 0.95;
     line-height: 1.4;
     font-family: "Segoe UI", Arial, sans-serif;
+    background: rgba(0,0,0,0.0); /* شفافية الخلفية */
 }
-
-.page-footer a.email-link {
-    color: #0a5fb4;
-    text-decoration: none;
-    font-weight:500;
-    transition: color 0.2s ease;
-}
-
-.page-footer a.email-link:hover {
-    color: #083c75;
-    text-decoration: underline;
-}
-
 </style>
 </head>
 
@@ -134,11 +122,7 @@ button:hover {
 </div>
 
 <div class="page-footer">
-    <span style="font-weight:600;">Created by Abdullah Salem</span> – IT Department | For more information, don’t hesitate to contact us: 
-    <a href="mailto:it@kettaneh.com.jo" class="email-link">
-        <img src="email-icon.png" alt="Email" style="width:14px; vertical-align:middle; margin-right:4px;">
-        it@kettaneh.com.jo
-    </a>
+    <span style="font-weight:600;">Created by Abdullah Salem</span> – IT Department | For more information, don’t hesitate to contact us: it@kettaneh.com.jo
 </div>
 
 <script>
