@@ -16,15 +16,23 @@ body {
     max-width: 420px;
     margin: auto;
     background: #ffffff;
-    padding: 25px;
-    border-radius: 18px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    padding: 26px;
+    border-radius: 20px;
+    box-shadow: 0 14px 35px rgba(0,0,0,0.25);
     text-align: center;
 }
 
 .logo {
-    max-width: 180px;
-    margin-bottom: 10px;
+    max-width: 230px;
+    margin-bottom: 6px;
+}
+
+.slogan {
+    font-size: 14px;
+    letter-spacing: 1.2px;
+    color: #6b7280;
+    margin-bottom: 18px;
+    font-weight: 600;
 }
 
 h2 {
@@ -59,14 +67,14 @@ button:hover {
 
 #qrcode {
     display: none;
-    margin: 20px auto;
+    margin: 22px auto;
     max-width: 100%;
 }
 
 .footer {
     font-size: 13px;
     color: #777;
-    margin-top: 15px;
+    margin-top: 18px;
 }
 </style>
 </head>
@@ -75,14 +83,18 @@ button:hover {
 
 <div class="container">
 
-    <img src="logo.png" class="logo" alt="Kettaneh Logo">
+    <!-- Logo -->
+    <img src="Logo.png" class="logo" alt="Kettaneh Logo">
+    <div class="slogan">LET’S PARTNER FOR LIFE</div>
 
     <h2>Digital Business Card</h2>
 
+    <!-- Inputs -->
     <input type="text" id="name" placeholder="Full Name">
     <input type="text" id="phone" placeholder="Phone (ex: +962780888093)">
     <input type="email" id="email" placeholder="Email">
 
+    <!-- Actions -->
     <button onclick="generateQR()">Generate QR Code</button>
 
     <img id="qrcode">
@@ -108,7 +120,6 @@ function generateQR() {
         return;
     }
 
-    // vCard with full company + social info
     const vCard = `BEGIN:VCARD
 VERSION:3.0
 N:${name};;;;
@@ -124,7 +135,7 @@ X-SOCIALPROFILE;type=youtube:https://www.youtube.com/channel/UCN_3mZJzPJrh-gAkWw
 END:VCARD`;
 
     qrImageUrl =
-        "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" +
+        "https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=" +
         encodeURIComponent(vCard);
 
     const img = document.getElementById("qrcode");
