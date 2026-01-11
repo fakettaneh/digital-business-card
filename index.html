@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-/* ===== Global ===== */
 body {
     margin: 0;
     font-family: "Segoe UI", Arial, sans-serif;
@@ -17,7 +16,6 @@ body {
     align-items: center;
 }
 
-/* ===== Card ===== */
 .container {
     max-width: 420px;
     width: 90%;
@@ -30,25 +28,15 @@ body {
     transition: transform 0.2s ease;
 }
 
-.container:hover {
-    transform: translateY(-5px);
-}
+.container:hover { transform: translateY(-5px); }
 
-.logo {
-    max-width: 220px;
-    margin-bottom: 16px;
-}
+.logo { max-width: 220px; margin-bottom: 16px; }
 
-h2 {
-    color: #0b3c74;
-    margin-bottom: 20px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-}
+h2 { color: #0b3c74; margin-bottom: 20px; font-weight: 700; letter-spacing: 0.5px; }
 
-/* ===== Inputs ===== */
+input, button { width: 100%; }
+
 input {
-    width: 100%;
     padding: 14px;
     margin: 10px 0;
     border-radius: 12px;
@@ -58,17 +46,12 @@ input {
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-input:focus {
-    border-color: #0a5fb4;
-    box-shadow: 0 0 5px rgba(10,95,180,0.3);
-}
+input:focus { border-color: #0a5fb4; box-shadow: 0 0 5px rgba(10,95,180,0.3); }
 
-/* ===== Buttons ===== */
 button {
-    width: 100%;
     padding: 16px;
     background: linear-gradient(135deg, #0a5fb4, #0b3c74);
-    color: #ffffff;
+    color: #fff;
     border: none;
     border-radius: 14px;
     font-size: 16px;
@@ -78,12 +61,8 @@ button {
     transition: background 0.3s ease, transform 0.2s ease;
 }
 
-button:hover {
-    background: linear-gradient(135deg, #083c75, #062e56);
-    transform: translateY(-2px);
-}
+button:hover { background: linear-gradient(135deg, #083c75, #062e56); transform: translateY(-2px); }
 
-/* ===== QR ===== */
 #qrcode {
     display: none;
     margin: 26px auto;
@@ -93,11 +72,8 @@ button:hover {
     transition: transform 0.2s ease;
 }
 
-#qrcode:hover {
-    transform: scale(1.05);
-}
+#qrcode:hover { transform: scale(1.05); }
 
-/* ===== Footer (جزء من البطاقة) ===== */
 .page-footer {
     margin-top: 25px;
     width: 100%;
@@ -119,11 +95,12 @@ button:hover {
     <h2>Digital Business Card</h2>
 
     <input type="text" id="name" placeholder="Full Name">
-    <input type="text" id="job" placeholder="Job Title (Optional)">
+    <input type="text" id="job" placeholder="Job Title">
     <input type="text" id="phone" placeholder="Phone (ex: +962780888093)">
     <input type="text" id="phone2" placeholder="Alternate Phone (Optional)">
     <input type="email" id="email" placeholder="Email">
     <input type="email" id="email2" placeholder="Alternate Email (Optional)">
+    <input type="file" id="photo" accept="image/*">
 
     <button onclick="generateQR()">Generate QR Code</button>
 
@@ -131,7 +108,6 @@ button:hover {
 
     <button id="saveQRBtn" style="display:none;" onclick="saveQR()">Save QR Code</button>
 
-    <!-- Footer داخل البطاقة -->
     <div class="page-footer">
         <span style="font-weight:600;">Created by Abdullah Salem</span> – IT Department | For more information, don’t hesitate to contact us: it@kettaneh.com.jo
     </div>
@@ -148,50 +124,52 @@ function generateQR() {
     const phone2 = document.getElementById("phone2").value.trim();
     const email = document.getElementById("email").value.trim();
     const email2 = document.getElementById("email2").value.trim();
+    const photoFile = document.getElementById("photo").files[0];
 
-    if (!name || !phone || !email) {
-        alert("Please fill at least Name, Phone, and Email");
+    if (!name || !job || !phone || !email) {
+        alert("Please fill Name, Job Title, Phone, and Email");
         return;
     }
 
     let vCard = `BEGIN:VCARD
 VERSION:3.0
 N:${name};;;;
-FN:${name}`;
-
-    if (job) vCard += `\nTITLE:${job}`;
-    vCard += `\nORG:F. A. Kettaneh & Co. LTD
+FN:${name}
+TITLE:${job}
+ORG:F. A. Kettaneh & Co. LTD
 TEL;TYPE=CELL:${phone}`;
+
     if (phone2) vCard += `\nTEL;TYPE=CELL:${phone2}`;
     vCard += `\nEMAIL:${email}`;
     if (email2) vCard += `\nEMAIL:${email2}`;
 
-    vCard += `
-URL:https://www.kettaneh.com.jo/en
-X-SOCIALPROFILE;type=instagram:https://www.instagram.com/kettanehjo
-X-SOCIALPROFILE;type=facebook:https://web.facebook.com/KettanehJo
-X-SOCIALPROFILE;type=linkedin:https://www.linkedin.com/company/f.a.kettaneh&coltdinjordansince1948/
-X-SOCIALPROFILE;type=youtube:https://www.youtube.com/channel/UCN_3mZJzPJrh-gAkWwd0kfw
-END:VCARD`;
+    // إضافة الصورة إذا تم رفعها
+    if (photoFile) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const base64Img = e.target.result.split(",")[1];
+            vCard += `\nPHOTO;ENCODING=b;TYPE=JPEG:${base64Img}`;
+            createQRCode(vCard);
+        };
+        reader.readAsDataURL(photoFile);
+    } else {
+        createQRCode(vCard);
+    }
+}
 
-    qrImageUrl =
-        "https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=" +
-        encodeURIComponent(vCard);
-
+function createQRCode(vCard) {
+    qrImageUrl = "https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=" + encodeURIComponent(vCard);
     const img = document.getElementById("qrcode");
     img.src = qrImageUrl;
     img.style.display = "block";
-
     document.getElementById("saveQRBtn").style.display = "block";
 }
 
 function saveQR() {
     if (!qrImageUrl) return;
-
     const link = document.createElement("a");
     link.href = qrImageUrl;
-    link.download =
-        document.getElementById("name").value.trim().replace(/\s+/g, "_") + "_QR.png";
+    link.download = document.getElementById("name").value.trim().replace(/\s+/g, "_") + "_QR.png";
     link.click();
 }
 </script>
