@@ -119,8 +119,11 @@ button:hover {
     <h2>Digital Business Card</h2>
 
     <input type="text" id="name" placeholder="Full Name">
+    <input type="text" id="job" placeholder="Job Title (Optional)">
     <input type="text" id="phone" placeholder="Phone (ex: +962780888093)">
+    <input type="text" id="phone2" placeholder="Alternate Phone (Optional)">
     <input type="email" id="email" placeholder="Email">
+    <input type="email" id="email2" placeholder="Alternate Email (Optional)">
 
     <button onclick="generateQR()">Generate QR Code</button>
 
@@ -140,21 +143,30 @@ let qrImageUrl = "";
 
 function generateQR() {
     const name = document.getElementById("name").value.trim();
+    const job = document.getElementById("job").value.trim();
     const phone = document.getElementById("phone").value.trim();
+    const phone2 = document.getElementById("phone2").value.trim();
     const email = document.getElementById("email").value.trim();
+    const email2 = document.getElementById("email2").value.trim();
 
     if (!name || !phone || !email) {
-        alert("Please fill all fields");
+        alert("Please fill at least Name, Phone, and Email");
         return;
     }
 
-    const vCard = `BEGIN:VCARD
+    let vCard = `BEGIN:VCARD
 VERSION:3.0
 N:${name};;;;
-FN:${name}
-ORG:F. A. Kettaneh & Co. LTD
-TEL;TYPE=CELL:${phone}
-EMAIL:${email}
+FN:${name}`;
+
+    if (job) vCard += `\nTITLE:${job}`;
+    vCard += `\nORG:F. A. Kettaneh & Co. LTD
+TEL;TYPE=CELL:${phone}`;
+    if (phone2) vCard += `\nTEL;TYPE=CELL:${phone2}`;
+    vCard += `\nEMAIL:${email}`;
+    if (email2) vCard += `\nEMAIL:${email2}`;
+
+    vCard += `
 URL:https://www.kettaneh.com.jo/en
 X-SOCIALPROFILE;type=instagram:https://www.instagram.com/kettanehjo
 X-SOCIALPROFILE;type=facebook:https://web.facebook.com/KettanehJo
