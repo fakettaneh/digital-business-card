@@ -15,17 +15,19 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 
 /* ===== Card ===== */
 .container {
     max-width: 420px;
-    margin: auto;
+    width: 90%;
     background: #ffffff;
-    padding: 28px 26px 30px;
+    padding: 28px 26px 40px;
     border-radius: 22px;
     box-shadow: 0 18px 40px rgba(0,0,0,0.25);
     text-align: center;
+    position: relative;
 }
 
 .logo {
@@ -78,18 +80,36 @@ button:hover {
     display: none;
     margin: 24px auto;
     max-width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 
 /* ===== Footer ===== */
 .page-footer {
     position: fixed;
-    bottom: 10px;
+    bottom: 14px;
     width: 100%;
     text-align: center;
-    font-size: 11px;
-    color: #e5e7eb;
-    opacity: 0.9;
+    font-size: 12px;
+    color: #f1f5f9;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    opacity: 0.95;
+    line-height: 1.4;
+    font-family: "Segoe UI", Arial, sans-serif;
 }
+
+.page-footer a.email-link {
+    color: #0a5fb4;
+    text-decoration: none;
+    font-weight:500;
+    transition: color 0.2s ease;
+}
+
+.page-footer a.email-link:hover {
+    color: #083c75;
+    text-decoration: underline;
+}
+
 </style>
 </head>
 
@@ -114,7 +134,11 @@ button:hover {
 </div>
 
 <div class="page-footer">
-    Created by <strong>Abdullah Salem</strong> – IT Department | For more information, don’t hesitate to contact us
+    <span style="font-weight:600;">Created by Abdullah Salem</span> – IT Department | For more information, don’t hesitate to contact us: 
+    <a href="mailto:it@kettaneh.com.jo" class="email-link">
+        <img src="email-icon.png" alt="Email" style="width:14px; vertical-align:middle; margin-right:4px;">
+        it@kettaneh.com.jo
+    </a>
 </div>
 
 <script>
