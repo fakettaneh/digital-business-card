@@ -6,68 +6,89 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
+/* ===== Global ===== */
 body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #0a5fb4, #083c75);
-    padding: 30px;
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg, #0b3c74, #0a5fb4);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
+/* ===== Card ===== */
 .container {
     max-width: 420px;
     margin: auto;
     background: #ffffff;
-    padding: 26px;
-    border-radius: 20px;
-    box-shadow: 0 14px 35px rgba(0,0,0,0.25);
+    padding: 28px 26px 30px;
+    border-radius: 22px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.25);
     text-align: center;
 }
 
 .logo {
-    max-width: 230px;
-    margin-bottom: 16px;
+    max-width: 220px;
+    margin-bottom: 14px;
 }
 
 h2 {
-    color: #083c75;
-    margin-bottom: 15px;
+    color: #0b3c74;
+    margin-bottom: 18px;
+    font-weight: 600;
 }
 
+/* ===== Inputs ===== */
 input {
     width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 8px;
-    border: 1px solid #ccc;
+    padding: 13px;
+    margin: 9px 0;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
     font-size: 15px;
+    outline: none;
 }
 
+input:focus {
+    border-color: #0a5fb4;
+}
+
+/* ===== Buttons ===== */
 button {
     width: 100%;
-    padding: 14px;
+    padding: 15px;
     background: #0a5fb4;
-    color: #fff;
+    color: #ffffff;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    margin-top: 10px;
+    margin-top: 12px;
+    transition: background 0.2s ease;
 }
 
 button:hover {
     background: #083c75;
 }
 
+/* ===== QR ===== */
 #qrcode {
     display: none;
-    margin: 22px auto;
+    margin: 24px auto;
     max-width: 100%;
 }
 
-.footer {
-    font-size: 12px;
-    color: #6b7280;
-    margin-top: 20px;
-    line-height: 1.5;
+/* ===== Footer ===== */
+.page-footer {
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+    color: #e5e7eb;
+    opacity: 0.9;
 }
 </style>
 </head>
@@ -76,29 +97,24 @@ button:hover {
 
 <div class="container">
 
-    <!-- Logo -->
     <img src="Logo.png" class="logo" alt="Kettaneh Logo">
 
     <h2>Digital Business Card</h2>
 
-    <!-- Inputs -->
     <input type="text" id="name" placeholder="Full Name">
     <input type="text" id="phone" placeholder="Phone (ex: +962780888093)">
     <input type="email" id="email" placeholder="Email">
 
-    <!-- Actions -->
     <button onclick="generateQR()">Generate QR Code</button>
 
     <img id="qrcode">
 
     <button id="saveQRBtn" style="display:none;" onclick="saveQR()">Save QR Code</button>
 
-    <!-- Footer -->
-    <div class="footer">
-        Created by <strong>Abdullah Salem</strong> – IT Department<br>
-        For more information, don’t hesitate to contact us
-    </div>
+</div>
 
+<div class="page-footer">
+    Created by <strong>Abdullah Salem</strong> – IT Department | For more information, don’t hesitate to contact us
 </div>
 
 <script>
