@@ -2,107 +2,93 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>F. A. Kettaneh – Digital Contact QR</title>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<title>Kettaneh – Digital Business Card</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-:root {
-    --primary:#0a3d62;
-    --secondary:#1e6091;
-    --light:#f4f6f8;
-    --text:#1f2937;
-}
-
+/* ===== Global ===== */
 body {
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    min-height: 100vh;
     margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg, #0b3c74, #0a5fb4);
+    min-height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
-    color: var(--text);
 }
 
+/* ===== Card ===== */
 .container {
-    width: 420px;
-    background: #fff;
-    border-radius: 18px;
-    padding: 25px 22px 35px;
-    box-shadow: 0 20px 40px rgba(0,0,0,.25);
+    max-width: 420px;
+    margin: auto;
+    background: #ffffff;
+    padding: 28px 26px 30px;
+    border-radius: 22px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.25);
     text-align: center;
 }
 
-.logo img {
-    max-width: 200px;
-    margin-bottom: 10px;
+.logo {
+    max-width: 220px;
+    margin-bottom: 14px;
 }
 
 h2 {
-    margin: 10px 0 20px;
-    color: var(--primary);
-    font-size: 22px;
+    color: #0b3c74;
+    margin-bottom: 18px;
+    font-weight: 600;
 }
 
+/* ===== Inputs ===== */
 input {
     width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 8px;
+    padding: 13px;
+    margin: 9px 0;
+    border-radius: 10px;
     border: 1px solid #d1d5db;
-    font-size: 14px;
+    font-size: 15px;
+    outline: none;
 }
 
+input:focus {
+    border-color: #0a5fb4;
+}
+
+/* ===== Buttons ===== */
 button {
     width: 100%;
-    padding: 13px;
-    background: var(--primary);
-    color: #fff;
+    padding: 15px;
+    background: #0a5fb4;
+    color: #ffffff;
     border: none;
-    border-radius: 8px;
-    font-size: 15px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
     margin-top: 12px;
+    transition: background 0.2s ease;
 }
 
 button:hover {
-    background: var(--secondary);
+    background: #083c75;
 }
 
+/* ===== QR ===== */
 #qrcode {
-    margin-top: 20px;
+    display: none;
+    margin: 24px auto;
+    max-width: 100%;
 }
 
-.social-links {
-    margin-top: 15px;
-    font-size: 12px;
-}
-
-.social-links a {
-    color: var(--secondary);
-    text-decoration: none;
-    margin: 0 6px;
-}
-
-.social-links a:hover {
-    text-decoration: underline;
-}
-
-/* Footer */
+/* ===== Footer ===== */
 .page-footer {
     position: fixed;
-    bottom: 8px;
+    bottom: 10px;
     width: 100%;
     text-align: center;
-    line-height: 1.4;
     font-size: 11px;
     color: #e5e7eb;
-}
-
-.page-footer a {
-    color: #93c5fd;
-    text-decoration: none;
+    opacity: 0.9;
 }
 </style>
 </head>
@@ -110,38 +96,30 @@ button:hover {
 <body>
 
 <div class="container">
-    <div class="logo">
-        <img src="logo.png" alt="F. A. Kettaneh & Co. LTD">
-    </div>
 
-    <h2>Digital Contact QR</h2>
+    <img src="Logo.png" class="logo" alt="Kettaneh Logo">
+
+    <h2>Digital Business Card</h2>
 
     <input type="text" id="name" placeholder="Full Name">
-    <input type="text" id="phone" placeholder="Phone (ex: +9627xxxxxxx)">
+    <input type="text" id="phone" placeholder="Phone (ex: +962780888093)">
     <input type="email" id="email" placeholder="Email">
 
     <button onclick="generateQR()">Generate QR Code</button>
 
-    <div id="qrcode"></div>
+    <img id="qrcode">
 
-    <div class="social-links">
-        <a href="https://www.kettaneh.com.jo/en" target="_blank">Website</a> |
-        <a href="https://www.instagram.com/kettanehjo" target="_blank">Instagram</a> |
-        <a href="https://web.facebook.com/KettanehJo" target="_blank">Facebook</a> |
-        <a href="https://www.youtube.com/channel/UCN_3mZJzPJrh-gAkWwd0kfw" target="_blank">YouTube</a> |
-        <a href="https://www.linkedin.com/company/f.a.kettaneh&coltdinjordansince1948/" target="_blank">LinkedIn</a>
-    </div>
+    <button id="saveQRBtn" style="display:none;" onclick="saveQR()">Save QR Code</button>
+
 </div>
 
-<!-- Footer -->
 <div class="page-footer">
-    Created by <strong>Abdullah Salem</strong> – IT Department<br>
-    For more information, don’t hesitate to contact us |
-    <a href="mailto:it@kettaneh.com.jo">it@kettaneh.com.jo</a><br>
-    © F. A. Kettaneh & Co. LTD
+    Created by <strong>Abdullah Salem</strong> – IT Department | For more information, don’t hesitate to contact us
 </div>
 
 <script>
+let qrImageUrl = "";
+
 function generateQR() {
     const name = document.getElementById("name").value.trim();
     const phone = document.getElementById("phone").value.trim();
@@ -154,6 +132,7 @@ function generateQR() {
 
     const vCard = `BEGIN:VCARD
 VERSION:3.0
+N:${name};;;;
 FN:${name}
 ORG:F. A. Kettaneh & Co. LTD
 TEL;TYPE=CELL:${phone}
@@ -165,14 +144,25 @@ X-SOCIALPROFILE;type=linkedin:https://www.linkedin.com/company/f.a.kettaneh&colt
 X-SOCIALPROFILE;type=youtube:https://www.youtube.com/channel/UCN_3mZJzPJrh-gAkWwd0kfw
 END:VCARD`;
 
-    document.getElementById("qrcode").innerHTML = "";
+    qrImageUrl =
+        "https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=" +
+        encodeURIComponent(vCard);
 
-    new QRCode(document.getElementById("qrcode"), {
-        text: vCard,
-        width: 230,
-        height: 230,
-        correctLevel: QRCode.CorrectLevel.H
-    });
+    const img = document.getElementById("qrcode");
+    img.src = qrImageUrl;
+    img.style.display = "block";
+
+    document.getElementById("saveQRBtn").style.display = "block";
+}
+
+function saveQR() {
+    if (!qrImageUrl) return;
+
+    const link = document.createElement("a");
+    link.href = qrImageUrl;
+    link.download =
+        document.getElementById("name").value.trim().replace(/\s+/g, "_") + "_QR.png";
+    link.click();
 }
 </script>
 
