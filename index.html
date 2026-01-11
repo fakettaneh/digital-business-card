@@ -5,6 +5,9 @@
 <title>Kettaneh – Digital Business Card</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<!-- Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
 body {
     margin: 0;
@@ -17,12 +20,12 @@ body {
 }
 
 .container {
-    max-width: 420px;
+    max-width: 440px;
     width: 90%;
     background: #ffffff;
-    padding: 30px 28px 42px;
-    border-radius: 24px;
-    box-shadow: 0 20px 45px rgba(0,0,0,0.3);
+    padding: 32px 30px 45px;
+    border-radius: 26px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
     text-align: center;
     position: relative;
     transition: transform 0.2s ease;
@@ -30,15 +33,27 @@ body {
 
 .container:hover { transform: translateY(-5px); }
 
-.logo { max-width: 220px; margin-bottom: 16px; }
+.logo { max-width: 220px; margin-bottom: 18px; }
 
-h2 { color: #0b3c74; margin-bottom: 20px; font-weight: 700; letter-spacing: 0.5px; }
+h2 { color: #0b3c74; margin-bottom: 22px; font-weight: 700; letter-spacing: 0.5px; }
 
-input, button { width: 100%; }
+.input-group {
+    position: relative;
+    margin: 12px 0;
+}
+
+.input-group i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #0a5fb4;
+    font-size: 16px;
+}
 
 input {
-    padding: 14px;
-    margin: 10px 0;
+    width: 100%;
+    padding: 14px 14px 14px 38px;
     border-radius: 12px;
     border: 1px solid #cbd5e1;
     font-size: 15px;
@@ -57,7 +72,7 @@ button {
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    margin-top: 14px;
+    margin-top: 16px;
     transition: background 0.3s ease, transform 0.2s ease;
 }
 
@@ -65,7 +80,7 @@ button:hover { background: linear-gradient(135deg, #083c75, #062e56); transform:
 
 #qrcode {
     display: none;
-    margin: 26px auto;
+    margin: 28px auto;
     max-width: 100%;
     border-radius: 14px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.25);
@@ -75,7 +90,7 @@ button:hover { background: linear-gradient(135deg, #083c75, #062e56); transform:
 #qrcode:hover { transform: scale(1.05); }
 
 .page-footer {
-    margin-top: 25px;
+    margin-top: 28px;
     width: 100%;
     text-align: center;
     font-size: 12px;
@@ -94,13 +109,45 @@ button:hover { background: linear-gradient(135deg, #083c75, #062e56); transform:
 
     <h2>Digital Business Card</h2>
 
-    <input type="text" id="name" placeholder="Full Name">
-    <input type="text" id="job" placeholder="Job Title">
-    <input type="text" id="phone" placeholder="Phone (ex: +962780888093)">
-    <input type="text" id="phone2" placeholder="Alternate Phone (Optional)">
-    <input type="email" id="email" placeholder="Email">
-    <input type="email" id="email2" placeholder="Alternate Email (Optional)">
-    <input type="file" id="photo" accept="image/*">
+    <div class="input-group">
+        <i class="fas fa-user"></i>
+        <input type="text" id="name" placeholder="Full Name">
+    </div>
+
+    <div class="input-group">
+        <i class="fas fa-briefcase"></i>
+        <input type="text" id="job" placeholder="Job Title">
+    </div>
+
+    <div class="input-group">
+        <i class="fas fa-phone"></i>
+        <input type="text" id="phone" placeholder="Phone (ex: +962780888093)">
+    </div>
+
+    <div class="input-group">
+        <i class="fas fa-phone"></i>
+        <input type="text" id="phone2" placeholder="Alternate Phone (Optional)">
+    </div>
+
+    <div class="input-group">
+        <i class="fas fa-envelope"></i>
+        <input type="email" id="email" placeholder="Email">
+    </div>
+
+    <div class="input-group">
+        <i class="fas fa-envelope"></i>
+        <input type="email" id="email2" placeholder="Alternate Email (Optional)">
+    </div>
+
+    <div class="input-group">
+        <i class="fab fa-linkedin"></i>
+        <input type="text" id="linkedin" placeholder="LinkedIn URL (Optional)">
+    </div>
+
+    <div class="input-group">
+        <i class="fas fa-globe"></i>
+        <input type="text" id="website" placeholder="Website (Optional)">
+    </div>
 
     <button onclick="generateQR()">Generate QR Code</button>
 
@@ -124,7 +171,8 @@ function generateQR() {
     const phone2 = document.getElementById("phone2").value.trim();
     const email = document.getElementById("email").value.trim();
     const email2 = document.getElementById("email2").value.trim();
-    const photoFile = document.getElementById("photo").files[0];
+    const linkedin = document.getElementById("linkedin").value.trim();
+    const website = document.getElementById("website").value.trim();
 
     if (!name || !job || !phone || !email) {
         alert("Please fill Name, Job Title, Phone, and Email");
@@ -142,52 +190,21 @@ TEL;TYPE=CELL:${phone}`;
     if (phone2) vCard += `\nTEL;TYPE=CELL:${phone2}`;
     vCard += `\nEMAIL:${email}`;
     if (email2) vCard += `\nEMAIL:${email2}`;
+    if (website) vCard += `\nURL:${website}`;
+    if (linkedin) vCard += `\nX-SOCIALPROFILE;type=linkedin:${linkedin}`;
 
-    // إذا تم رفع صورة، تصغيرها قبل إضافة Base64
-    if (photoFile) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = new Image();
-            img.onload = function() {
-                const canvas = document.createElement("canvas");
-                const maxSize = 150;
-                let width = img.width;
-                let height = img.height;
+    vCard += `
+X-SOCIALPROFILE;type=instagram:https://www.instagram.com/kettanehjo
+X-SOCIALPROFILE;type=facebook:https://web.facebook.com/KettanehJo
+X-SOCIALPROFILE;type=youtube:https://www.youtube.com/channel/UCN_3mZJzPJrh-gAkWwd0kfw
+END:VCARD`;
 
-                if (width > height) {
-                    if (width > maxSize) {
-                        height = Math.round(height *= maxSize / width);
-                        width = maxSize;
-                    }
-                } else {
-                    if (height > maxSize) {
-                        width = Math.round(width *= maxSize / height);
-                        height = maxSize;
-                    }
-                }
-
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0, width, height);
-
-                const base64Img = canvas.toDataURL("image/jpeg").split(",")[1];
-                vCard += `\nPHOTO;ENCODING=b;TYPE=JPEG:${base64Img}`;
-                createQRCode(vCard);
-            };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(photoFile);
-    } else {
-        createQRCode(vCard);
-    }
-}
-
-function createQRCode(vCard) {
     qrImageUrl = "https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=" + encodeURIComponent(vCard);
+
     const img = document.getElementById("qrcode");
     img.src = qrImageUrl;
     img.style.display = "block";
+
     document.getElementById("saveQRBtn").style.display = "block";
 }
 
