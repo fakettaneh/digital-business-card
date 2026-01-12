@@ -144,7 +144,7 @@ button:hover {
 
     <div class="input-group">
         <i class="fas fa-phone"></i>
-        <input type="text" id="phone" placeholder="Phone (ex: +962...)">
+        <input type="text" id="phone" placeholder="Phone (ex: +962780888093)">
     </div>
 
     <div class="input-group">
@@ -210,6 +210,7 @@ URL:${fixedWebsite}
 X-SOCIALPROFILE;type=instagram:${fixedInstagram}
 X-SOCIALPROFILE;type=linkedin:${fixedWebsite}
 X-SOCIALPROFILE;type=facebook:${fixedFacebook}
+X-SOCIALPROFILE;type=youtube:https://www.youtube.com/channel/UCN_3mZJzPJrh-gAkWwd0kfw
 END:VCARD`;
 
     qrImageUrl =
@@ -228,20 +229,26 @@ function saveQR() {
     if (!img.src) return;
 
     const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
+    const context = canvas.getContext("2d");
     const image = new Image();
     image.crossOrigin = "Anonymous";
     image.src = img.src;
 
-    image.onload = function () {
+    image.onload = function() {
         canvas.width = image.width;
         canvas.height = image.height;
-        ctx.drawImage(image, 0, 0);
+        context.drawImage(image, 0, 0);
 
+        const dataURL = canvas.toDataURL("image/png");
         const link = document.createElement("a");
-        link.href = canvas.toDataURL("image/png");
-        link.download = name.value.replace(/\s+/g, "_") + "_QR.png";
+        link.href = dataURL;
+        link.download = document.getElementById("name").value.trim().replace(/\s+/g, "_") + "_QR.png";
         link.click();
+        alert("QR Code saved successfully ✅");
+    };
+
+    image.onerror = function() {
+        alert("Failed to download QR Code. Try refreshing the page.");
     };
 }
 </script>
