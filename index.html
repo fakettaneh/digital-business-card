@@ -139,16 +139,6 @@ button:hover { background: linear-gradient(135deg, #083c75, #062e56); transform:
         <input type="email" id="email2" placeholder="Alternate Email (Optional)">
     </div>
 
-    <div class="input-group">
-        <i class="fab fa-linkedin"></i>
-        <input type="text" id="linkedin" placeholder="LinkedIn URL (Optional)">
-    </div>
-
-    <div class="input-group">
-        <i class="fas fa-globe"></i>
-        <input type="text" id="website" placeholder="Website (Optional)">
-    </div>
-
     <button onclick="generateQR()">Generate QR Code</button>
 
     <img id="qrcode">
@@ -163,6 +153,9 @@ button:hover { background: linear-gradient(135deg, #083c75, #062e56); transform:
 
 <script>
 let qrImageUrl = "";
+const fixedWebsite = "https://www.kettaneh.com.jo/en"; 
+const fixedInstagram = "https://www.instagram.com/kettanehjo";
+const fixedFacebook = "https://web.facebook.com/KettanehJo?_rdc=1&_rdr#";
 
 function generateQR() {
     const name = document.getElementById("name").value.trim();
@@ -171,8 +164,6 @@ function generateQR() {
     const phone2 = document.getElementById("phone2").value.trim();
     const email = document.getElementById("email").value.trim();
     const email2 = document.getElementById("email2").value.trim();
-    const linkedin = document.getElementById("linkedin").value.trim();
-    const website = document.getElementById("website").value.trim();
 
     if (!name || !job || !phone || !email) {
         alert("Please fill Name, Job Title, Phone, and Email");
@@ -190,12 +181,13 @@ TEL;TYPE=CELL:${phone}`;
     if (phone2) vCard += `\nTEL;TYPE=CELL:${phone2}`;
     vCard += `\nEMAIL:${email}`;
     if (email2) vCard += `\nEMAIL:${email2}`;
-    if (website) vCard += `\nURL:${website}`;
-    if (linkedin) vCard += `\nX-SOCIALPROFILE;type=linkedin:${linkedin}`;
 
+    // روابط ثابتة
     vCard += `
-X-SOCIALPROFILE;type=instagram:https://www.instagram.com/kettanehjo
-X-SOCIALPROFILE;type=facebook:https://web.facebook.com/KettanehJo
+URL:${fixedWebsite}
+X-SOCIALPROFILE;type=instagram:${fixedInstagram}
+X-SOCIALPROFILE;type=linkedin:${fixedWebsite}
+X-SOCIALPROFILE;type=facebook:${fixedFacebook}
 X-SOCIALPROFILE;type=youtube:https://www.youtube.com/channel/UCN_3mZJzPJrh-gAkWwd0kfw
 END:VCARD`;
 
