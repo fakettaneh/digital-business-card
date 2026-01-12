@@ -5,147 +5,93 @@
 <title>Kettaneh – Digital Business Card</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- Font Awesome for Icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 <style>
 /* ===== Global ===== */
-* {
-    box-sizing: border-box; /* مهم جداً لمنع خروج الحقول عن البنر */
-}
-
 body {
     margin: 0;
     font-family: "Segoe UI", Arial, sans-serif;
     background: linear-gradient(135deg, #0b3c74, #0a5fb4);
     min-height: 100vh;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 24px 12px 40px;
+    box-sizing: border-box;
 }
 
-/* ===== Container ===== */
+/* ===== Card ===== */
 .container {
-    max-width: 450px;
     width: 100%;
+    max-width: 420px;
     background: #ffffff;
-    padding: 32px 30px 45px;
-    border-radius: 28px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    padding: 28px 24px 30px;
+    border-radius: 22px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.25);
     text-align: center;
-    margin: auto; /* يضمن التمركز */
-    transition: transform 0.2s ease;
+    box-sizing: border-box;
 }
 
-.container:hover {
-    transform: translateY(-5px);
-}
-
-/* ===== Logo ===== */
 .logo {
     max-width: 220px;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
 }
 
-/* ===== Title ===== */
 h2 {
     color: #0b3c74;
-    margin-bottom: 25px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+    margin-bottom: 18px;
+    font-weight: 600;
 }
 
-/* ===== Input Groups ===== */
-.input-group {
-    position: relative;
-    margin: 14px 0;
-}
-
-.input-group i {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #0a5fb4;
-    font-size: 16px;
-}
-
+/* ===== Inputs ===== */
 input {
-    width: 100%; /* يضمن أن الحقول داخل البنر */
-    max-width: 100%;
-    padding: 14px 14px 14px 42px; /* مساحة للأيقونة */
-    border-radius: 12px;
-    border: 1px solid #cbd5e1;
+    width: 100%;
+    padding: 13px;
+    margin: 9px 0;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
     font-size: 15px;
     outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
 }
 
 input:focus {
     border-color: #0a5fb4;
-    box-shadow: 0 0 5px rgba(10,95,180,0.3);
 }
 
 /* ===== Buttons ===== */
 button {
     width: 100%;
-    max-width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, #0a5fb4, #0b3c74);
-    color: #fff;
+    padding: 15px;
+    background: #0a5fb4;
+    color: #ffffff;
     border: none;
-    border-radius: 14px;
+    border-radius: 12px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    margin-top: 16px;
-    transition: background 0.3s ease, transform 0.2s ease;
+    margin-top: 12px;
+    transition: background 0.2s ease;
 }
 
 button:hover {
-    background: linear-gradient(135deg, #083c75, #062e56);
-    transform: translateY(-2px);
+    background: #083c75;
 }
 
-/* ===== QR Code ===== */
+/* ===== QR ===== */
 #qrcode {
     display: none;
-    margin: 28px auto;
+    margin: 24px auto;
     max-width: 100%;
-    border-radius: 14px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-    transition: transform 0.2s ease;
-}
-
-#qrcode:hover {
-    transform: scale(1.05);
 }
 
 /* ===== Footer ===== */
 .page-footer {
-    margin-top: 28px;
-    width: 100%;
+    margin-top: 22px;
     text-align: center;
     font-size: 12px;
-    color: #0b3c74;
-    line-height: 1.4;
-}
-
-/* ===== Responsive ===== */
-@media screen and (max-width: 500px) {
-    .container {
-        padding: 25px 20px 35px;
-    }
-
-    input {
-        padding: 12px 12px 12px 38px;
-    }
-
-    button {
-        padding: 14px;
-        font-size: 15px;
-    }
+    color: #e5e7eb;
+    opacity: 0.9;
+    line-height: 1.6;
 }
 </style>
 </head>
@@ -158,35 +104,12 @@ button:hover {
 
     <h2>Digital Business Card</h2>
 
-    <div class="input-group">
-        <i class="fas fa-user"></i>
-        <input type="text" id="name" placeholder="Full Name">
-    </div>
-
-    <div class="input-group">
-        <i class="fas fa-briefcase"></i>
-        <input type="text" id="job" placeholder="Job Title">
-    </div>
-
-    <div class="input-group">
-        <i class="fas fa-phone"></i>
-        <input type="text" id="phone" placeholder="Phone (ex: +962780888093)">
-    </div>
-
-    <div class="input-group">
-        <i class="fas fa-phone"></i>
-        <input type="text" id="phone2" placeholder="Alternate Phone (Optional)">
-    </div>
-
-    <div class="input-group">
-        <i class="fas fa-envelope"></i>
-        <input type="email" id="email" placeholder="Email">
-    </div>
-
-    <div class="input-group">
-        <i class="fas fa-envelope"></i>
-        <input type="email" id="email2" placeholder="Alternate Email (Optional)">
-    </div>
+    <input type="text" id="name" placeholder="Full Name">
+    <input type="text" id="job" placeholder="Job Title">
+    <input type="text" id="phone1" placeholder="Primary Phone (ex: +962...)">
+    <input type="text" id="phone2" placeholder="Secondary Phone (Optional)">
+    <input type="email" id="email1" placeholder="Primary Email">
+    <input type="email" id="email2" placeholder="Secondary Email (Optional)">
 
     <button onclick="generateQR()">Generate QR Code</button>
 
@@ -194,52 +117,50 @@ button:hover {
 
     <button id="saveQRBtn" style="display:none;" onclick="saveQR()">Save QR Code</button>
 
-    <div class="page-footer">
-        <span style="font-weight:600;">Created by Abdullah Salem</span> – IT Department | For more information, don’t hesitate to contact us: it@kettaneh.com.jo
-    </div>
+</div>
 
+<div class="page-footer">
+    Created by <strong>Abdullah Salem</strong> | IT Department — it@kettaneh.com.jo
 </div>
 
 <script>
 let qrImageUrl = "";
-const fixedWebsite = "https://www.kettaneh.com.jo/en"; 
-const fixedInstagram = "https://www.instagram.com/kettanehjo";
-const fixedFacebook = "https://web.facebook.com/KettanehJo?_rdc=1&_rdr#";
 
 function generateQR() {
     const name = document.getElementById("name").value.trim();
     const job = document.getElementById("job").value.trim();
-    const phone = document.getElementById("phone").value.trim();
+    const phone1 = document.getElementById("phone1").value.trim();
     const phone2 = document.getElementById("phone2").value.trim();
-    const email = document.getElementById("email").value.trim();
+    const email1 = document.getElementById("email1").value.trim();
     const email2 = document.getElementById("email2").value.trim();
 
-    if (!name || !job || !phone || !email) {
-        alert("Please fill Name, Job Title, Phone, and Email");
+    if (!name || !job || !phone1 || !email1) {
+        alert("Please fill all required fields");
         return;
     }
 
     let vCard = `BEGIN:VCARD
 VERSION:3.0
 N:${name};;;;
+
 FN:${name}
 TITLE:${job}
 ORG:F. A. Kettaneh & Co. LTD
-TEL;TYPE=CELL:${phone}`;
+TEL;TYPE=CELL:${phone1}`;
 
-    if (phone2) vCard += `\nTEL;TYPE=CELL:${phone2}`;
-    vCard += `\nEMAIL:${email}`;
+    if (phone2) vCard += `\nTEL;TYPE=WORK:${phone2}`;
+    vCard += `\nEMAIL:${email1}`;
     if (email2) vCard += `\nEMAIL:${email2}`;
 
     vCard += `
-URL:${fixedWebsite}
-X-SOCIALPROFILE;type=instagram:${fixedInstagram}
-X-SOCIALPROFILE;type=linkedin:${fixedWebsite}
-X-SOCIALPROFILE;type=facebook:${fixedFacebook}
-X-SOCIALPROFILE;type=youtube:https://www.youtube.com/channel/UCN_3mZJzPJrh-gAkWwd0kfw
+URL:https://www.kettaneh.com.jo/en
+X-SOCIALPROFILE;type=instagram:https://www.instagram.com/kettanehjo
+X-SOCIALPROFILE;type=facebook:https://web.facebook.com/KettanehJo
 END:VCARD`;
 
-    qrImageUrl = "https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=" + encodeURIComponent(vCard);
+    qrImageUrl =
+        "https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=" +
+        encodeURIComponent(vCard);
 
     const img = document.getElementById("qrcode");
     img.src = qrImageUrl;
@@ -249,31 +170,13 @@ END:VCARD`;
 }
 
 function saveQR() {
-    const img = document.getElementById("qrcode");
-    if (!img.src) return;
+    if (!qrImageUrl) return;
 
-    const canvas = document.createElement("canvas");
-    const context = canvas.getContext("2d");
-    const image = new Image();
-    image.crossOrigin = "Anonymous";
-    image.src = img.src;
-
-    image.onload = function() {
-        canvas.width = image.width;
-        canvas.height = image.height;
-        context.drawImage(image, 0, 0);
-
-        const dataURL = canvas.toDataURL("image/png");
-        const link = document.createElement("a");
-        link.href = dataURL;
-        link.download = document.getElementById("name").value.trim().replace(/\s+/g, "_") + "_QR.png";
-        link.click();
-        alert("QR Code saved successfully ✅");
-    };
-
-    image.onerror = function() {
-        alert("Failed to download QR Code. Try refreshing the page.");
-    };
+    const link = document.createElement("a");
+    link.href = qrImageUrl;
+    link.download =
+        document.getElementById("name").value.trim().replace(/\s+/g, "_") + "_QR.png";
+    link.click();
 }
 </script>
 
