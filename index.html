@@ -200,12 +200,33 @@ END:VCARD`;
     document.getElementById("saveQRBtn").style.display = "block";
 }
 
+// تحديث Save QR لتعمل دائمًا
 function saveQR() {
-    if (!qrImageUrl) return;
-    const link = document.createElement("a");
-    link.href = qrImageUrl;
-    link.download = document.getElementById("name").value.trim().replace(/\s+/g, "_") + "_QR.png";
-    link.click();
+    const img = document.getElementById("qrcode");
+    if (!img.src) return;
+
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    const image = new Image();
+    image.crossOrigin = "Anonymous";
+    image.src = img.src;
+
+    image.onload = function() {
+        canvas.width = image.width;
+        canvas.height = image.height;
+        context.drawImage(image, 0, 0);
+
+        const dataURL = canvas.toDataURL("image/png");
+        const link = document.createElement("a");
+        link.href = dataURL;
+        link.download = document.getElementById("name").value.trim().replace(/\s+/g, "_") + "_QR.png";
+        link.click();
+        alert("QR Code saved successfully ✅");
+    };
+
+    image.onerror = function() {
+        alert("Failed to download QR Code. Try refreshing the page.");
+    };
 }
 </script>
 
