@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
+/* ===== Global ===== */
 body {
     margin: 0;
     font-family: "Segoe UI", Arial, sans-serif;
@@ -17,34 +18,48 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
 
+/* ===== Container ===== */
 .container {
-    max-width: 440px;
-    width: 90%;
+    max-width: 450px;
+    width: 100%;
     background: #ffffff;
     padding: 32px 30px 45px;
-    border-radius: 26px;
+    border-radius: 28px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.35);
     text-align: center;
-    position: relative;
     transition: transform 0.2s ease;
 }
 
-.container:hover { transform: translateY(-5px); }
+.container:hover {
+    transform: translateY(-5px);
+}
 
-.logo { max-width: 220px; margin-bottom: 18px; }
+/* ===== Logo ===== */
+.logo {
+    max-width: 220px;
+    margin-bottom: 20px;
+}
 
-h2 { color: #0b3c74; margin-bottom: 22px; font-weight: 700; letter-spacing: 0.5px; }
+/* ===== Title ===== */
+h2 {
+    color: #0b3c74;
+    margin-bottom: 25px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
 
+/* ===== Input Groups ===== */
 .input-group {
     position: relative;
-    margin: 12px 0;
+    margin: 14px 0;
 }
 
 .input-group i {
     position: absolute;
-    left: 12px;
+    left: 14px;
     top: 50%;
     transform: translateY(-50%);
     color: #0a5fb4;
@@ -53,7 +68,7 @@ h2 { color: #0b3c74; margin-bottom: 22px; font-weight: 700; letter-spacing: 0.5p
 
 input {
     width: 100%;
-    padding: 14px 14px 14px 38px;
+    padding: 14px 14px 14px 42px;
     border-radius: 12px;
     border: 1px solid #cbd5e1;
     font-size: 15px;
@@ -61,9 +76,14 @@ input {
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-input:focus { border-color: #0a5fb4; box-shadow: 0 0 5px rgba(10,95,180,0.3); }
+input:focus {
+    border-color: #0a5fb4;
+    box-shadow: 0 0 5px rgba(10,95,180,0.3);
+}
 
+/* ===== Buttons ===== */
 button {
+    width: 100%;
     padding: 16px;
     background: linear-gradient(135deg, #0a5fb4, #0b3c74);
     color: #fff;
@@ -76,8 +96,12 @@ button {
     transition: background 0.3s ease, transform 0.2s ease;
 }
 
-button:hover { background: linear-gradient(135deg, #083c75, #062e56); transform: translateY(-2px); }
+button:hover {
+    background: linear-gradient(135deg, #083c75, #062e56);
+    transform: translateY(-2px);
+}
 
+/* ===== QR Code ===== */
 #qrcode {
     display: none;
     margin: 28px auto;
@@ -87,8 +111,11 @@ button:hover { background: linear-gradient(135deg, #083c75, #062e56); transform:
     transition: transform 0.2s ease;
 }
 
-#qrcode:hover { transform: scale(1.05); }
+#qrcode:hover {
+    transform: scale(1.05);
+}
 
+/* ===== Footer ===== */
 .page-footer {
     margin-top: 28px;
     width: 100%;
@@ -96,7 +123,22 @@ button:hover { background: linear-gradient(135deg, #083c75, #062e56); transform:
     font-size: 12px;
     color: #0b3c74;
     line-height: 1.4;
-    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* ===== Responsive ===== */
+@media screen and (max-width: 500px) {
+    .container {
+        padding: 25px 20px 35px;
+    }
+
+    input {
+        padding: 12px 12px 12px 38px;
+    }
+
+    button {
+        padding: 14px;
+        font-size: 15px;
+    }
 }
 </style>
 </head>
@@ -200,7 +242,7 @@ END:VCARD`;
     document.getElementById("saveQRBtn").style.display = "block";
 }
 
-// تحديث Save QR لتعمل دائمًا
+// زر Save QR محسّن للعمل على جميع المتصفحات
 function saveQR() {
     const img = document.getElementById("qrcode");
     if (!img.src) return;
