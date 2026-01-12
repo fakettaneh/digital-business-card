@@ -11,7 +11,7 @@
 <style>
 /* ===== Global ===== */
 * {
-    box-sizing: border-box; /* مهم جداً لمنع خروج الحقول عن البنر */
+    box-sizing: border-box;
 }
 
 body {
@@ -34,7 +34,7 @@ body {
     border-radius: 28px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.35);
     text-align: center;
-    margin: auto; /* يضمن التمركز */
+    margin: auto;
     transition: transform 0.2s ease;
 }
 
@@ -72,14 +72,12 @@ h2 {
 }
 
 input {
-    width: 100%; /* يضمن أن الحقول داخل البنر */
-    max-width: 100%;
-    padding: 14px 14px 14px 42px; /* مساحة للأيقونة */
+    width: 100%;
+    padding: 14px 14px 14px 42px;
     border-radius: 12px;
     border: 1px solid #cbd5e1;
     font-size: 15px;
     outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 input:focus {
@@ -90,7 +88,6 @@ input:focus {
 /* ===== Buttons ===== */
 button {
     width: 100%;
-    max-width: 100%;
     padding: 16px;
     background: linear-gradient(135deg, #0a5fb4, #0b3c74);
     color: #fff;
@@ -100,12 +97,10 @@ button {
     font-weight: 600;
     cursor: pointer;
     margin-top: 16px;
-    transition: background 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
     background: linear-gradient(135deg, #083c75, #062e56);
-    transform: translateY(-2px);
 }
 
 /* ===== QR Code ===== */
@@ -115,11 +110,6 @@ button:hover {
     max-width: 100%;
     border-radius: 14px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-    transition: transform 0.2s ease;
-}
-
-#qrcode:hover {
-    transform: scale(1.05);
 }
 
 /* ===== Footer ===== */
@@ -130,22 +120,6 @@ button:hover {
     font-size: 12px;
     color: #0b3c74;
     line-height: 1.4;
-}
-
-/* ===== Responsive ===== */
-@media screen and (max-width: 500px) {
-    .container {
-        padding: 25px 20px 35px;
-    }
-
-    input {
-        padding: 12px 12px 12px 38px;
-    }
-
-    button {
-        padding: 14px;
-        font-size: 15px;
-    }
 }
 </style>
 </head>
@@ -170,7 +144,7 @@ button:hover {
 
     <div class="input-group">
         <i class="fas fa-phone"></i>
-        <input type="text" id="phone" placeholder="Phone (ex: +962780888093)">
+        <input type="text" id="phone" placeholder="Phone (ex: +962...)">
     </div>
 
     <div class="input-group">
@@ -195,7 +169,7 @@ button:hover {
     <button id="saveQRBtn" style="display:none;" onclick="saveQR()">Save QR Code</button>
 
     <div class="page-footer">
-        <span style="font-weight:600;">Created by Abdullah Salem</span> – IT Department | For more information, don’t hesitate to contact us: it@kettaneh.com.jo
+        <span style="font-weight:600;">Created by Abdullah Salem</span> | IT Department — it@kettaneh.com.jo
     </div>
 
 </div>
@@ -236,10 +210,11 @@ URL:${fixedWebsite}
 X-SOCIALPROFILE;type=instagram:${fixedInstagram}
 X-SOCIALPROFILE;type=linkedin:${fixedWebsite}
 X-SOCIALPROFILE;type=facebook:${fixedFacebook}
-X-SOCIALPROFILE;type=youtube:https://www.youtube.com/channel/UCN_3mZJzPJrh-gAkWwd0kfw
 END:VCARD`;
 
-    qrImageUrl = "https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=" + encodeURIComponent(vCard);
+    qrImageUrl =
+        "https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=" +
+        encodeURIComponent(vCard);
 
     const img = document.getElementById("qrcode");
     img.src = qrImageUrl;
@@ -253,26 +228,20 @@ function saveQR() {
     if (!img.src) return;
 
     const canvas = document.createElement("canvas");
-    const context = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
     const image = new Image();
     image.crossOrigin = "Anonymous";
     image.src = img.src;
 
-    image.onload = function() {
+    image.onload = function () {
         canvas.width = image.width;
         canvas.height = image.height;
-        context.drawImage(image, 0, 0);
+        ctx.drawImage(image, 0, 0);
 
-        const dataURL = canvas.toDataURL("image/png");
         const link = document.createElement("a");
-        link.href = dataURL;
-        link.download = document.getElementById("name").value.trim().replace(/\s+/g, "_") + "_QR.png";
+        link.href = canvas.toDataURL("image/png");
+        link.download = name.value.replace(/\s+/g, "_") + "_QR.png";
         link.click();
-        alert("QR Code saved successfully ✅");
-    };
-
-    image.onerror = function() {
-        alert("Failed to download QR Code. Try refreshing the page.");
     };
 }
 </script>
